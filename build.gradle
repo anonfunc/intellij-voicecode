@@ -1,0 +1,26 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+    }
+}
+
+plugins {
+  id "org.jetbrains.intellij" version "0.2.18"
+}
+
+apply plugin: 'java'
+apply plugin: 'org.jetbrains.intellij'
+
+intellij {
+    version '2017.3.4'
+    pluginName 'Voicecode IDEA'
+}
+
+group 'com.github.anonfunc.vcidea'
+version '0.0.1'
+
+repositories {
+    mavenCentral()
+}
