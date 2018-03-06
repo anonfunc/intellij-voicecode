@@ -83,7 +83,12 @@ public class VoicecodePlugin implements ApplicationComponent, HttpHandler {
             final InputStream is = httpExchange.getRequestBody();
             final Scanner s = new Scanner(is).useDelimiter("\\A");
             String response = VcCommand.fromRequestUri(httpExchange.getRequestURI()).run();
-            httpExchange.sendResponseHeaders(200, response.length());
+            if (response == null) {
+                response = "BAD";
+                httpExchange.sendResponseHeaders(502, response.length());
+            } else {
+                httpExchange.sendResponseHeaders(200, response.length());
+            }
             OutputStream os = httpExchange.getResponseBody();
             os.write(response.getBytes());
             os.close();

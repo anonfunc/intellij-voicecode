@@ -1,17 +1,20 @@
 <idea-plugin>
   <id>com.github.anonfunc.vcidea</id>
   <name>Voicecode Idea</name>
-  <version>1.0</version>
-  <vendor email="support@yourcompany.com" url="http://www.yourcompany.com">YourCompany</vendor>
+  <version>0.0.2</version>
+  <vendor email="anonfunc@gmail.com" url="http://www.github.com/anonfunc/intellij-voicecode">anonfunc</vendor>
 
   <description><![CDATA[
-      Enter short description for your plugin here.<br>
-      <em>most HTML tags may be used</em>
-    ]]></description>
+    This plugin adds a small web server which supports a <a href="http://voicecode.io">Voicecode</a> package.
+
+    For more information, see <a href="https://github.com/anonfunc/voicecode-intellij">the corresponding Voicecode package</a>.
+  ]]></description>
 
   <change-notes><![CDATA[
-      Add change notes here.<br>
-      <em>most HTML tags may be used</em>
+      <ul>
+      <li>0.0.2 - Mostly complete.</li> 
+      <li>0.0.1 - Initial commit.</li> 
+      </ul>
     ]]>
   </change-notes>
 
