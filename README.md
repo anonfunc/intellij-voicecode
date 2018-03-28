@@ -17,6 +17,10 @@ This should support:
 
 However, my primary use case is currently Java and IntelliJ CE.  I will not be able to debug or reproduce issues occuring outside of the freely available IDEs.  (Pull requests are welcome. :smile:)  Support for these IDEs is contingent on their menu items remaining very similar, see *Limitations*.
 
-## Installation
+## Manual Installation
 
 ### Download release zip, install plugin from zip.
+
+## Testing uncommitted changes
+
+    ./gradlew runIde

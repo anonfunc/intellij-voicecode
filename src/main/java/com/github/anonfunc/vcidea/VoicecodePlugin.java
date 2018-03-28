@@ -5,6 +5,8 @@ import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
 import com.intellij.openapi.components.ApplicationComponent;
+import com.intellij.openapi.util.registry.Registry;
+import com.intellij.openapi.util.registry.RegistryValue;
 import com.intellij.util.PlatformUtils;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -25,6 +27,7 @@ public class VoicecodePlugin implements ApplicationComponent, HttpHandler {
     public static final int DEFAULT_PORT = 8652;
 
     private static final Map<String, Integer> PLATFORM_TO_PORT = new HashMap<>();
+    public static final String EDITOR_SKIP_COPY_AND_CUT_FOR_EMPTY_SELECTION = "editor.skip.copy.and.cut.for.empty.selection";
 
     static {
         PLATFORM_TO_PORT.put(PlatformUtils.IDEA_PREFIX, 8653);
@@ -63,6 +66,12 @@ public class VoicecodePlugin implements ApplicationComponent, HttpHandler {
         server.createContext("/", this);
         server.setExecutor(null); // creates a default executor
         server.start();
+        RegistryValue registryValue = Registry.get(EDITOR_SKIP_COPY_AND_CUT_FOR_EMPTY_SELECTION);
+        if (!registryValue.asBoolean()) {
+            registryValue.setValue(true);
+        }
+
+
     }
 
     @Override

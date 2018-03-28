@@ -14,12 +14,12 @@ apply plugin: 'java'
 apply plugin: 'org.jetbrains.intellij'
 
 intellij {
-    version '2017.3.4'
+    version '2018.1'
     pluginName 'Voicecode IDEA'
 }
 
 group 'com.github.anonfunc.vcidea'
-version '0.0.2'
+version '0.0.3'
 
 repositories {
     mavenCentral()
