@@ -1,7 +1,7 @@
 <idea-plugin>
   <id>com.github.anonfunc.vcidea</id>
   <name>Voicecode Idea</name>
-  <version>0.0.2</version>
+  <version>0.0.3</version>
   <vendor email="anonfunc@gmail.com" url="http://www.github.com/anonfunc/intellij-voicecode">anonfunc</vendor>
 
   <description><![CDATA[
@@ -12,6 +12,7 @@
 
   <change-notes><![CDATA[
       <ul>
+      <li>0.0.3 - Update to 2018.1 and reduce manual setup.</li>
       <li>0.0.2 - Mostly complete.</li> 
       <li>0.0.1 - Initial commit.</li> 
       </ul>
