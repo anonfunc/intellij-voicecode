@@ -1,12 +1,17 @@
 package com.github.anonfunc.vcidea.commands;
 
+import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.ex.EditorEx;
 import com.intellij.openapi.editor.ex.util.EditorUtil;
 import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
+import com.intellij.openapi.wm.IdeFocusManager;
+import com.intellij.openapi.wm.IdeFrame;
+import com.intellij.openapi.wm.WindowManager;
 
+import java.awt.*;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLDecoder;
@@ -15,14 +20,15 @@ import java.util.Arrays;
 public interface VcCommand {
     static VcCommand fromRequestUri(URI requestURI) {
 
-        final String[] split;
+        String[] split;
         try {
             String decode = URLDecoder.decode(requestURI.toString().substring(1), "UTF-8");
+            split = decode.split("/");
             // XXX For debugging
 //            Notification notification =new Notification("vc-idea", "Voicecode Plugin", decode,
 //                    NotificationType.INFORMATION);
 //            Notifications.Bus.notify(notification);
-            split = decode.split(" ");
+            split = split[1].split(" ");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
             return null;
@@ -54,22 +60,17 @@ public interface VcCommand {
         return null;
     }
 
-    static EditorEx getEditorEx() {
-        Project[] openProjects = ProjectManager.getInstance().getOpenProjects();
-        EditorEx e = null;
-        System.out.println("Open projects: " + openProjects.length);
-        for (Project p : openProjects) {
-            FileEditor[] selectedEditors = FileEditorManager.getInstance(openProjects[0]).getSelectedEditors();
-            System.out.println("Selected editors: " + selectedEditors.length);
-            if (selectedEditors.length >= 1) {
-                e = EditorUtil.getEditorEx(selectedEditors[0]);
-                break;
-            }
-        }
+    static Editor getEditor() {
+        Project currentProject = getProject();
+        Editor e = FileEditorManager.getInstance(currentProject).getSelectedTextEditor();
         if (e == null) {
             System.out.println("No selected editor?");
         }
         return e;
+    }
+
+    static Project getProject() {
+        return IdeFocusManager.findInstance().getLastFocusedFrame().getProject();
     }
 
     String run();

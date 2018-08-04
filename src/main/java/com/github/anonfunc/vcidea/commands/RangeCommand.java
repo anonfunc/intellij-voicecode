@@ -1,6 +1,7 @@
 package com.github.anonfunc.vcidea.commands;
 
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.LogicalPosition;
 import com.intellij.openapi.editor.ScrollType;
 import com.intellij.openapi.editor.SelectionModel;
@@ -19,10 +20,9 @@ public class RangeCommand implements VcCommand {
 
     @Override
     public String run() {
-        final EditorEx e = VcCommand.getEditorEx();
-
-        final SelectionModel selection = e.getSelectionModel();
         ApplicationManager.getApplication().invokeAndWait(() -> {
+            final Editor e = VcCommand.getEditor();
+            final SelectionModel selection = e.getSelectionModel();
             e.getCaretModel().moveToLogicalPosition(new LogicalPosition(startLine, 0));
             int startOffset = e.getCaretModel().getOffset();
             e.getCaretModel().moveToLogicalPosition(new LogicalPosition(endLine + 1, 0));

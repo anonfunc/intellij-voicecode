@@ -1,6 +1,7 @@
 package com.github.anonfunc.vcidea.commands;
 
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.LogicalPosition;
 import com.intellij.openapi.editor.ScrollType;
 import com.intellij.openapi.editor.ex.EditorEx;
@@ -19,8 +20,8 @@ public class GotoCommand implements VcCommand {
     @Override
     public String run() {
         final LogicalPosition pos = new LogicalPosition(line, column);
-        final EditorEx e = VcCommand.getEditorEx();
         ApplicationManager.getApplication().invokeAndWait(() -> {
+            final Editor e = VcCommand.getEditor();
             e.getCaretModel().removeSecondaryCarets();
             e.getCaretModel().moveToLogicalPosition(pos);
             e.getScrollingModel().scrollToCaret(ScrollType.CENTER);

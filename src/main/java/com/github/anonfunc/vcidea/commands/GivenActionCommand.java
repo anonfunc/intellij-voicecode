@@ -3,6 +3,7 @@ package com.github.anonfunc.vcidea.commands;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.ex.EditorEx;
 import com.intellij.openapi.ui.playback.commands.ActionCommand;
 
@@ -19,8 +20,8 @@ public class GivenActionCommand implements VcCommand {
 
     @Override
     public String run() {
-        final EditorEx e = VcCommand.getEditorEx();
         ApplicationManager.getApplication().invokeAndWait(() -> {
+            final Editor e = VcCommand.getEditor();
             AnAction action = ActionManager.getInstance().getAction(actionId);
             InputEvent event = ActionCommand.getInputEvent(actionId);
             Component component = e.getComponent();

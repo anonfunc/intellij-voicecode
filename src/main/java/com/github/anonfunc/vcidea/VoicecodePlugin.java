@@ -18,6 +18,12 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
+import java.security.SecureRandom;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -48,9 +54,20 @@ public class VoicecodePlugin implements ApplicationComponent, HttpHandler {
     @Override
     public void initComponent() {
         System.out.println("Starting Voicecode plugin...");
+        SecureRandom random = new SecureRandom();
+        byte[] bytes = new byte[20];
+        random.nextBytes(bytes);
+        String nonce = new String(Base64.getUrlEncoder().encode(bytes));
         Integer port = PLATFORM_TO_PORT.getOrDefault(PlatformUtils.getPlatformPrefix(), DEFAULT_PORT);
+        try {
+            Path path = FileSystems.getDefault().getPath("/tmp", "vcidea_" + port.toString());
+            Files.write(path, nonce.getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-        Notification notification =new Notification("vc-idea", "Voicecode Plugin","Listening on " + port,
+        Notification notification =new Notification("vc-idea",
+                "Voicecode Plugin","Listening on http://localhost:" + port + "/" + nonce,
                 NotificationType.INFORMATION);
         Notifications.Bus.notify(notification);
 
@@ -63,7 +80,7 @@ public class VoicecodePlugin implements ApplicationComponent, HttpHandler {
             e.printStackTrace();
             return;
         }
-        server.createContext("/", this);
+        server.createContext("/" + nonce, this);
         server.setExecutor(null); // creates a default executor
         server.start();
         RegistryValue registryValue = Registry.get(EDITOR_SKIP_COPY_AND_CUT_FOR_EMPTY_SELECTION);
