@@ -7,19 +7,19 @@ buildscript {
 }
 
 plugins {
-  id "org.jetbrains.intellij" version "0.2.18"
+  id "org.jetbrains.intellij" version "0.3.12"
 }
 
 apply plugin: 'java'
 apply plugin: 'org.jetbrains.intellij'
 
 intellij {
-    version '2018.2'
+    version '2018.3'
     pluginName 'Voicecode IDEA'
 }
 
 group 'com.github.anonfunc.vcidea'
-version '0.0.4'
+version '0.0.5'
 
 repositories {
     mavenCentral()
