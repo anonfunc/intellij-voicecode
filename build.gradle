@@ -18,8 +18,13 @@ intellij {
     pluginName 'Voicecode IDEA'
 }
 
+tasks.withType(JavaCompile) {
+    options.compilerArgs << '-Xlint:unchecked'
+    options.deprecation = true
+}
+
 group 'com.github.anonfunc.vcidea'
-version '0.0.5'
+version '0.0.6'
 
 repositories {
     mavenCentral()

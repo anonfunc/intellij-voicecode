@@ -38,6 +38,7 @@ public class FindCommand implements VcCommand {
             final FindModel findModel = new FindModel();
             findModel.setStringToFind(searchTerm);
             findModel.setCaseSensitive(false);
+            findModel.setRegularExpressions(true);
             findModel.setForward(direction.equals("next"));
             final FindResult result = findManager.findString(
                     document.getCharsSequence(),
@@ -45,7 +46,11 @@ public class FindCommand implements VcCommand {
                     findModel);
 
             if (result.isStringFound()) {
-                e.getCaretModel().moveToOffset(result.getStartOffset());
+                if (direction.equals("next")) {
+                    e.getCaretModel().moveToOffset(result.getEndOffset());
+                } else {
+                    e.getCaretModel().moveToOffset(result.getStartOffset());
+                }
                 selection.setSelection(result.getStartOffset(), result.getEndOffset());
                 e.getScrollingModel().scrollToCaret(ScrollType.CENTER);
                 IdeFocusManager.getGlobalInstance().requestFocus(e.getContentComponent(), true);
