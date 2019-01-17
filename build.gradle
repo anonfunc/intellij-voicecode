@@ -24,7 +24,13 @@ tasks.withType(JavaCompile) {
 }
 
 group 'com.github.anonfunc.vcidea'
-version '0.0.6'
+version '0.0.7'
+
+
+publishPlugin {
+    username 'anonfunc'
+    password jetbrainsPassword
+}
 
 repositories {
     mavenCentral()

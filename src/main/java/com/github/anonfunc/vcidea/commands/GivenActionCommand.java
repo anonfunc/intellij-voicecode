@@ -21,10 +21,13 @@ public class GivenActionCommand implements VcCommand {
     @Override
     public String run() {
         ApplicationManager.getApplication().invokeAndWait(() -> {
-            final Editor e = VcCommand.getEditor();
             AnAction action = ActionManager.getInstance().getAction(actionId);
             InputEvent event = ActionCommand.getInputEvent(actionId);
-            Component component = e.getComponent();
+            final Editor e = VcCommand.getEditor();
+            Component component = null;
+            if (e != null) {
+                component = e.getComponent();
+            }
             ActionManager.getInstance().tryToExecute(action, event, component, null, true);
         });
         return "OK";

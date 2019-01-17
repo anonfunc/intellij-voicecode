@@ -120,6 +120,11 @@ public class VoicecodePlugin implements ApplicationComponent, HttpHandler {
             os.close();
         } catch (Exception e) {
             e.printStackTrace();
+            final String response = e.toString();
+            httpExchange.sendResponseHeaders(500, response.length());
+            OutputStream os = httpExchange.getResponseBody();
+            os.write(response.getBytes());
+            os.close();
         }
     }
 }
