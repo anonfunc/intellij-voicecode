@@ -1,7 +1,7 @@
 <idea-plugin>
   <id>com.github.anonfunc.vcidea</id>
   <name>Voicecode Idea</name>
-  <version>0.0.7</version>
+  <version>0.0.8</version>
   <vendor email="anonfunc@gmail.com" url="http://www.github.com/anonfunc/intellij-voicecode">anonfunc</vendor>
 
   <description><![CDATA[
@@ -12,6 +12,7 @@
 
   <change-notes><![CDATA[
       <ul>
+      <li>0.0.8 - Build against EAP.</li>
       <li>0.0.7 - Fix action command when there are no open editors.</li>
       <li>0.0.6 - Find command takes a regex now.</li>
       <li>0.0.5 - Update to 2018.3.</li>
@@ -24,7 +25,7 @@
   </change-notes>
 
   <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
-  <idea-version since-build="173"/>
+  <idea-version since-build="183"/>
 
   <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
        on how to target different products -->
