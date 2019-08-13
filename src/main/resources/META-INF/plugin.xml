@@ -1,17 +1,18 @@
 <idea-plugin>
   <id>com.github.anonfunc.vcidea</id>
   <name>Voicecode Idea</name>
-  <version>0.0.8</version>
+  <version>0.0.9</version>
   <vendor email="anonfunc@gmail.com" url="http://www.github.com/anonfunc/intellij-voicecode">anonfunc</vendor>
 
   <description><![CDATA[
-    This plugin adds a small web server which supports a <a href="http://voicecode.io">Voicecode</a> package.
+    This plugin adds a small web server which supports a <a href="http://talonvoice.com">Talon</a> module.
 
-    For more information, see <a href="https://github.com/anonfunc/voicecode-intellij">the corresponding Voicecode package</a>.
+    For an example integration, see <a href="https://github.com/anonfunc/talon-user>this Talon configuration</a>.
   ]]></description>
 
   <change-notes><![CDATA[
       <ul>
+      <li>0.0.9 - Add 'psi' command for structured navigation / selection.</li>
       <li>0.0.8 - Build against EAP.</li>
       <li>0.0.7 - Fix action command when there are no open editors.</li>
       <li>0.0.6 - Find command takes a regex now.</li>
@@ -25,11 +26,12 @@
   </change-notes>
 
   <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
-  <idea-version since-build="183"/>
+  <idea-version since-build="192"/>
 
   <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
        on how to target different products -->
 
+  <depends>com.intellij.modules.platform</depends>
   <depends>com.intellij.modules.lang</depends>
 
   <extensions defaultExtensionNs="com.intellij">

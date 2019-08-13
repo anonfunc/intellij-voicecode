@@ -3,7 +3,6 @@ package com.github.anonfunc.vcidea.commands;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.LogicalPosition;
-import com.intellij.openapi.editor.ex.EditorEx;
 
 public class LocationCommand implements VcCommand {
 

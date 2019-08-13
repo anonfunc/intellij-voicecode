@@ -5,7 +5,6 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.LogicalPosition;
 import com.intellij.openapi.editor.ScrollType;
 import com.intellij.openapi.editor.SelectionModel;
-import com.intellij.openapi.editor.ex.EditorEx;
 import com.intellij.openapi.wm.IdeFocusManager;
 
 public class RangeCommand implements VcCommand {

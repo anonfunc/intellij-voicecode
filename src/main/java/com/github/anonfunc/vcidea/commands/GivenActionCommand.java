@@ -4,10 +4,8 @@ import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.ex.EditorEx;
 import com.intellij.openapi.ui.playback.commands.ActionCommand;
-
-import java.awt.*;
+import java.awt.Component;
 import java.awt.event.InputEvent;
 
 // Not sure if this works.  XXX

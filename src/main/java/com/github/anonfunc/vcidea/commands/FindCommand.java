@@ -3,19 +3,14 @@ package com.github.anonfunc.vcidea.commands;
 import com.intellij.find.FindManager;
 import com.intellij.find.FindModel;
 import com.intellij.find.FindResult;
-import com.intellij.openapi.actionSystem.ActionManager;
-import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.editor.*;
-import com.intellij.openapi.editor.ex.DocumentEx;
-import com.intellij.openapi.editor.ex.EditorEx;
+import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.editor.ScrollType;
+import com.intellij.openapi.editor.SelectionModel;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
-import com.intellij.openapi.ui.playback.commands.ActionCommand;
 import com.intellij.openapi.wm.IdeFocusManager;
-
-import java.awt.*;
-import java.awt.event.InputEvent;
 
 public class FindCommand implements VcCommand {
     private String direction;

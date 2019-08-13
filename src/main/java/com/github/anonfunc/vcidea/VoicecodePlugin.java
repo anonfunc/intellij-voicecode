@@ -21,7 +21,6 @@ import java.net.InetSocketAddress;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 import java.security.SecureRandom;
 import java.util.Base64;
 import java.util.HashMap;
@@ -58,6 +57,7 @@ public class VoicecodePlugin implements ApplicationComponent, HttpHandler {
         byte[] bytes = new byte[20];
         random.nextBytes(bytes);
         String nonce = new String(Base64.getUrlEncoder().encode(bytes));
+//        String nonce = "localdev";
         Integer port = PLATFORM_TO_PORT.getOrDefault(PlatformUtils.getPlatformPrefix(), DEFAULT_PORT);
         try {
             Path path = FileSystems.getDefault().getPath("/tmp", "vcidea_" + port.toString());

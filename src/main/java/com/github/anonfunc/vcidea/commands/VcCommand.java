@@ -1,17 +1,11 @@
 package com.github.anonfunc.vcidea.commands;
 
 import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.ex.EditorEx;
-import com.intellij.openapi.editor.ex.util.EditorUtil;
-import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.wm.IdeFocusManager;
-import com.intellij.openapi.wm.IdeFrame;
-import com.intellij.openapi.wm.WindowManager;
-
-import java.awt.*;
+import com.intellij.psi.PsiDocumentManager;
+import com.intellij.psi.PsiFile;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLDecoder;
@@ -57,6 +51,9 @@ public interface VcCommand {
         if (command.equals("find")) {
             return new FindCommand(split[1], String.join(" ", Arrays.copyOfRange(split, 2, split.length)));
         }
+        if (command.equals("psi")) {
+            return new StructureCommand(split[1], String.join(" ", Arrays.copyOfRange(split, 2, split.length)).split(","));
+        }
         return null;
     }
 
@@ -67,6 +64,14 @@ public interface VcCommand {
             System.out.println("No selected editor?");
         }
         return e;
+    }
+
+    static PsiFile getPsiFile() {
+        Project currentProject = getProject();
+        Editor e = FileEditorManager.getInstance(currentProject).getSelectedTextEditor();
+        final PsiFile psiFile = PsiDocumentManager.getInstance(currentProject)
+            .getPsiFile(e.getDocument());
+        return psiFile;
     }
 
     static Project getProject() {
