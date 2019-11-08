@@ -1,17 +1,22 @@
-<idea-plugin>
+<idea-plugin version="2">
   <id>com.github.anonfunc.vcidea</id>
-  <name>Voicecode Idea</name>
-  <version>0.0.9</version>
+  <name>Voice Code Idea</name>
+  <version>dummy</version>
   <vendor email="anonfunc@gmail.com" url="http://www.github.com/anonfunc/intellij-voicecode">anonfunc</vendor>
 
   <description><![CDATA[
-    This plugin adds a small web server which supports a <a href="http://talonvoice.com">Talon</a> module.
+    <p>This plugin adds a small web server which supports a Talon module, but can be used generically as an
+    HTTP based RPC driven by any system on the same machine.</p>
 
-    For an example integration, see <a href="https://github.com/anonfunc/talon-user>this Talon configuration</a>.
+    <p>For an example integration, see <a href="https://github.com/anonfunc/talon-user">the author's Talon files.</a></p>
+
+    <p>Support, if any, provided in the #jetbrains channel of the Talon slack. See <a href="https://talonvoice.com/">the Talon homepage</a> for
+    more information about Talon.</p>
   ]]></description>
 
   <change-notes><![CDATA[
       <ul>
+      <li>0.0.10 - 'psi' command no longer stops on first match.  Update name and description.</li>
       <li>0.0.9 - Add 'psi' command for structured navigation / selection.</li>
       <li>0.0.8 - Build against EAP.</li>
       <li>0.0.7 - Fix action command when there are no open editors.</li>

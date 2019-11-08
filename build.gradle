@@ -15,7 +15,7 @@ apply plugin: 'org.jetbrains.intellij'
 
 intellij {
     version 'LATEST-EAP-SNAPSHOT'
-    pluginName 'Voicecode IDEA'
+    pluginName 'Voice Code IDEA'
     updateSinceUntilBuild false
     sameSinceUntilBuild true
 }
@@ -26,7 +26,7 @@ tasks.withType(JavaCompile) {
 }
 
 group 'com.github.anonfunc.vcidea'
-version '0.0.9'
+version '0.0.10'
 
 
 publishPlugin {

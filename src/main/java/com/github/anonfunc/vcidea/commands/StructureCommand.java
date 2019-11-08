@@ -65,7 +65,7 @@ public class StructureCommand implements VcCommand {
         } else if (cursorMovement.equals("end")) {
           e.getCaretModel().moveToOffset(result.getEndOffset());
         } else {
-          e.getCaretModel().moveToOffset(result.getEndOffset());
+          e.getCaretModel().moveToOffset(result.getStartOffset());
           e.getSelectionModel().setSelection(result.getStartOffset(), result.getEndOffset());
         }
         e.getScrollingModel().scrollToCaret(ScrollType.CENTER);
@@ -128,7 +128,7 @@ public class StructureCommand implements VcCommand {
       if (current.getNode() != null && matches(navType,
           current.getNode().getElementType().toString())) {
         results.add(current);
-        continue;
+//        continue;
       }
       PsiElement child = current.getFirstChild();
       while (child != null) {
@@ -152,32 +152,44 @@ public class StructureCommand implements VcCommand {
       return results.get(index);
     } else if (direction.equals("next")) {
       results.sort(Comparator.comparingInt(PsiElement::getTextOffset));
+      PsiElement best = null;
+      int distance = 9999;
       for (PsiElement result : results) {
         System.out
-            .println("Result " + result + " offset: " + result.getTextOffset() + " > " + offset);
-        if (result.getTextOffset() > offset) {
-          return result;
+            .println("Result " + result + " offset: " + result.getTextRange().getStartOffset() + " > " + offset);
+        final int dist = result.getTextRange().getStartOffset() - offset;
+        if (dist > 0 && dist <= distance) {
+          best = result;
+          distance = dist;
         }
       }
-      return null;
+      return best;
     } else if (direction.equals("last")) {
-      results.sort((o1, o2) -> -Integer.compare(o1.getTextOffset(), o2.getTextOffset()));
+      results.sort((o1, o2) -> -Integer.compare(o1.getTextRange().getEndOffset(), o2.getTextRange().getEndOffset()));
+      PsiElement best = null;
+      int distance = 9999;
       for (PsiElement result : results) {
         System.out.println(
             "Result " + result + " offset: " + result.getTextRange().getEndOffset() + " < "
                 + offset);
-        if (result.getTextRange().getEndOffset() < offset) {
-          return result;
+        final int dist = offset - result.getTextRange().getEndOffset();
+        if (dist > 0 && dist <= distance) {
+          best = result;
+          distance = dist;
         }
       }
-      return null;
+      return best;
     } else if (direction.equals("this")) {
+      PsiElement best = null;
+      int size = 999999;
       for (PsiElement result : results) {
-        if (result.getTextRange().contains(offset)) {
-          return result;
+
+        if (result.getTextRange().contains(offset) && result.getTextLength() < size) {
+          best = result;
+          size = result.getTextLength();
         }
       }
-      return null;
+      return best;
     }
     return null;
   }
