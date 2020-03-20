@@ -33,6 +33,7 @@ public class VoicecodePlugin implements ApplicationComponent, HttpHandler {
 
     private static final Map<String, Integer> PLATFORM_TO_PORT = new HashMap<>();
     public static final String EDITOR_SKIP_COPY_AND_CUT_FOR_EMPTY_SELECTION = "editor.skip.copy.and.cut.for.empty.selection";
+    private Path pathToNonce;
 
     static {
         PLATFORM_TO_PORT.put(PlatformUtils.IDEA_PREFIX, 8653);
@@ -60,8 +61,8 @@ public class VoicecodePlugin implements ApplicationComponent, HttpHandler {
 //        String nonce = "localdev";
         Integer port = PLATFORM_TO_PORT.getOrDefault(PlatformUtils.getPlatformPrefix(), DEFAULT_PORT);
         try {
-            Path path = FileSystems.getDefault().getPath("/tmp", "vcidea_" + port.toString());
-            Files.write(path, nonce.getBytes());
+            pathToNonce = FileSystems.getDefault().getPath(System.getProperty("user.home"), "vcidea_" + port.toString());
+            Files.write(pathToNonce, nonce.getBytes());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -93,6 +94,11 @@ public class VoicecodePlugin implements ApplicationComponent, HttpHandler {
 
     @Override
     public void disposeComponent() {
+        try {
+            Files.delete(pathToNonce);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         System.out.println("Disposing of Voicecode plugin");
     }
 
