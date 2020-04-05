@@ -61,7 +61,7 @@ public class VoicecodePlugin implements ApplicationComponent, HttpHandler {
 //        String nonce = "localdev";
         Integer port = PLATFORM_TO_PORT.getOrDefault(PlatformUtils.getPlatformPrefix(), DEFAULT_PORT);
         try {
-            pathToNonce = FileSystems.getDefault().getPath(System.getProperty("user.home"), "vcidea_" + port.toString());
+            pathToNonce = FileSystems.getDefault().getPath(System.getProperty("java.io.tmpdir"), "vcidea_" + port.toString());
             Files.write(pathToNonce, nonce.getBytes());
         } catch (IOException e) {
             e.printStackTrace();
