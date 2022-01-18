@@ -32,7 +32,6 @@ public class VoicecodePlugin implements ApplicationComponent, HttpHandler {
     public static final int DEFAULT_PORT = 8652;
 
     private static final Map<String, Integer> PLATFORM_TO_PORT = new HashMap<>();
-    public static final String EDITOR_SKIP_COPY_AND_CUT_FOR_EMPTY_SELECTION = "editor.skip.copy.and.cut.for.empty.selection";
     private Path pathToNonce;
 
     static {
@@ -84,12 +83,6 @@ public class VoicecodePlugin implements ApplicationComponent, HttpHandler {
         server.createContext("/" + nonce, this);
         server.setExecutor(null); // creates a default executor
         server.start();
-        RegistryValue registryValue = Registry.get(EDITOR_SKIP_COPY_AND_CUT_FOR_EMPTY_SELECTION);
-        if (!registryValue.asBoolean()) {
-            registryValue.setValue(true);
-        }
-
-
     }
 
     @Override
