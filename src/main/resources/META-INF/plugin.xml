@@ -15,18 +15,7 @@
   ]]></description>
 
   <change-notes><![CDATA[
-      <ul>
-      <li>0.0.10 - 'psi' command no longer stops on first match.  Update name and description.</li>
-      <li>0.0.9 - Add 'psi' command for structured navigation / selection.</li>
-      <li>0.0.8 - Build against EAP.</li>
-      <li>0.0.7 - Fix action command when there are no open editors.</li>
-      <li>0.0.6 - Find command takes a regex now.</li>
-      <li>0.0.5 - Update to 2018.3.</li>
-      <li>0.0.4 - Update to 2018.2, fix bug around multiple projects/editors, CSRF issue.</li>
-      <li>0.0.3 - Update to 2018.1 and reduce manual setup.</li>
-      <li>0.0.2 - Mostly complete.</li> 
-      <li>0.0.1 - Initial commit.</li> 
-      </ul>
+  Will be replaced.
     ]]>
   </change-notes>
 

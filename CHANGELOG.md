@@ -9,6 +9,6 @@
 - Recreated build from JetBrains/intellij-plugin-template
 
 
-## [0.0.10]
+## [0.0.11]
 
 Last Release
