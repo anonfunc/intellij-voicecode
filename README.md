@@ -1,4 +1,8 @@
 # IntelliJ support for VoiceCode (IDE plugin)
+<!-- Plugin description -->
+This plugin adds a small web server which supports a Talon module, but can be used generically as an
+HTTP based RPC driven by any system on the same machine.t
+<!-- Plugin description end -->
 
 This adds [VoiceCode](https://voicecode.io) support for IntelliJ, in tandem with [this VoiceCode package](https://github.com/anonfunc/voicecode-intellij).
 
