@@ -100,11 +100,8 @@ jobs:
 #          path: ${{ github.workspace }}/build/reports/pluginVerifier
 
       - name: Build Plugin Artifact
-        id: artifact
         shell: bash
         run: ./gradlew buildPlugin
-
-          echo "::set-output name=filename::$FILENAME"
       # Prepare plugin archive content for creating artifact
       - name: Prepare Plugin Artifact
         id: artifact
