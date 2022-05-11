@@ -3,6 +3,7 @@
 #  Changelog
 
 ## [Unreleased]
+- Bump platformVersion to 2022.1 to support latest intellij
 
 ## [0.0.12]
 ### Added
