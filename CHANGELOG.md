@@ -3,6 +3,7 @@
 #  Changelog
 
 ## [Unreleased]
+- Update pluginUntilBuild to support 2022.1
 
 ## [0.0.13]
 - Bump platformVersion to 2022.1 to support latest intellij
