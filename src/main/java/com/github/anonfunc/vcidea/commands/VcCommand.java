@@ -71,7 +71,8 @@ public interface VcCommand {
     static ToolWindow getToolWindow() {
         Project currentProject = getProject();
         ToolWindowManager twm = ToolWindowManager.getInstance(currentProject);
-        ToolWindow tw = twm.getToolWindow(twm.getActiveToolWindowId());        if (tw == null) {
+        ToolWindow tw = twm.getToolWindow(twm.getActiveToolWindowId());
+        if (tw == null) {
             System.out.println("No selected tool window?");
         }
         return tw;
