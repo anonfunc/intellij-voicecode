@@ -3,6 +3,8 @@
 #  Changelog
 
 ## [Unreleased]
+
+## [0.0.15]
 - Update pluginUntilBuild to support 2022.1
 
 ## [0.0.13]
