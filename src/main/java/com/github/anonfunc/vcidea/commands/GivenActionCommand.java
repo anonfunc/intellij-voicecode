@@ -3,9 +3,8 @@ package com.github.anonfunc.vcidea.commands;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.ui.playback.commands.ActionCommand;
-import com.intellij.openapi.wm.ToolWindow;
-
 import java.awt.Component;
 import java.awt.event.InputEvent;
 
@@ -22,7 +21,7 @@ public class GivenActionCommand implements VcCommand {
         ApplicationManager.getApplication().invokeAndWait(() -> {
             AnAction action = ActionManager.getInstance().getAction(actionId);
             InputEvent event = ActionCommand.getInputEvent(actionId);
-            final ToolWindow e = VcCommand.getToolWindow();
+            final Editor e = VcCommand.getEditor();
             Component component = null;
             if (e != null) {
                 component = e.getComponent();
