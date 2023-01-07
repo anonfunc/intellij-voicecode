@@ -4,6 +4,8 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.IdeFocusManager;
+import com.intellij.openapi.wm.ToolWindow;
+import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
 import java.io.UnsupportedEncodingException;
@@ -64,6 +66,16 @@ public interface VcCommand {
             System.out.println("No selected editor?");
         }
         return e;
+    }
+
+    static ToolWindow getToolWindow() {
+        Project currentProject = getProject();
+        ToolWindowManager twm = ToolWindowManager.getInstance(currentProject);
+        ToolWindow tw = twm.getToolWindow(twm.getActiveToolWindowId());
+        if (tw == null) {
+            System.out.println("No selected tool window?");
+        }
+        return tw;
     }
 
     static PsiFile getPsiFile() {
