@@ -72,7 +72,6 @@ public class VoicecodePlugin implements HttpHandler, AppLifecycleListener {
 
         // https://stackoverflow.com/questions/3732109/simple-http-server-in-java-using-only-java-se-api#3732328
         final InetSocketAddress loopbackSocket = new InetSocketAddress(InetAddress.getLoopbackAddress(), port);
-        final HttpServer server;
         try {
             server = HttpServer.create(loopbackSocket, -1);
         } catch (IOException e) {
@@ -87,11 +86,16 @@ public class VoicecodePlugin implements HttpHandler, AppLifecycleListener {
     @Override
     public void appWillBeClosed(boolean isRestart) {
         try {
-            Files.delete(pathToNonce);
+            if(pathToNonce != null) {
+                Files.delete(pathToNonce);
+            }
         } catch (IOException e) {
             LOG.error("Failed to cleanup nonce file", e);
         }
-        server.stop(1);
+        
+        if(server != null) {
+            server.stop(1);
+        }
         LOG.info("Completed cleanup of Voicecode plugin");
     }
 
