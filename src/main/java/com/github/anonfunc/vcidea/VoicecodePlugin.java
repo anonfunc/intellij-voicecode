@@ -1,17 +1,15 @@
 package com.github.anonfunc.vcidea;
 
 import com.github.anonfunc.vcidea.commands.VcCommand;
+import com.intellij.ide.AppLifecycleListener;
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
-import com.intellij.openapi.components.ApplicationComponent;
-import com.intellij.openapi.util.registry.Registry;
-import com.intellij.openapi.util.registry.RegistryValue;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.util.PlatformUtils;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,17 +20,18 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.SecureRandom;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
-public class VoicecodePlugin implements ApplicationComponent, HttpHandler {
+
+public class VoicecodePlugin implements HttpHandler, AppLifecycleListener {
 
     public static final int DEFAULT_PORT = 8652;
 
     private static final Map<String, Integer> PLATFORM_TO_PORT = new HashMap<>();
+    private static final Logger LOG = Logger.getInstance(VoicecodePlugin.class);
+
     private Path pathToNonce;
+    private HttpServer server;
 
     static {
         PLATFORM_TO_PORT.put(PlatformUtils.IDEA_PREFIX, 8653);
@@ -51,8 +50,8 @@ public class VoicecodePlugin implements ApplicationComponent, HttpHandler {
     }
 
     @Override
-    public void initComponent() {
-        System.out.println("Starting Voicecode plugin...");
+    public void appStarted() {
+        LOG.info("Starting Voicecode plugin...");
         SecureRandom random = new SecureRandom();
         byte[] bytes = new byte[20];
         random.nextBytes(bytes);
@@ -63,10 +62,10 @@ public class VoicecodePlugin implements ApplicationComponent, HttpHandler {
             pathToNonce = FileSystems.getDefault().getPath(System.getProperty("java.io.tmpdir"), "vcidea_" + port.toString());
             Files.write(pathToNonce, nonce.getBytes());
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("Failed to write nonce file", e);
         }
 
-        Notification notification =new Notification("vc-idea",
+        Notification notification = new Notification("vc-idea",
                 "Voicecode Plugin","Listening on http://localhost:" + port + "/" + nonce,
                 NotificationType.INFORMATION);
         Notifications.Bus.notify(notification);
@@ -77,7 +76,7 @@ public class VoicecodePlugin implements ApplicationComponent, HttpHandler {
         try {
             server = HttpServer.create(loopbackSocket, -1);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("Failed to start server to listen for commands", e);
             return;
         }
         server.createContext("/" + nonce, this);
@@ -86,44 +85,40 @@ public class VoicecodePlugin implements ApplicationComponent, HttpHandler {
     }
 
     @Override
-    public void disposeComponent() {
+    public void appWillBeClosed(boolean isRestart) {
         try {
             Files.delete(pathToNonce);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("Failed to cleanup nonce file", e);
         }
-        System.out.println("Disposing of Voicecode plugin");
-    }
-
-    @NotNull
-    @Override
-    public String getComponentName() {
-        return "VoiceCode IDEA";
+        server.stop(1);
+        LOG.info("Completed cleanup of Voicecode plugin");
     }
 
     @Override
     public void handle(final HttpExchange httpExchange) throws IOException {
         try {
-            System.out.println("Handling " + httpExchange.getRequestURI().toString() + httpExchange.getRequestMethod());
+            LOG.debug("Handling " + httpExchange.getRequestURI().toString() + httpExchange.getRequestMethod());
             final InputStream is = httpExchange.getRequestBody();
             final Scanner s = new Scanner(is).useDelimiter("\\A");
-            String response = VcCommand.fromRequestUri(httpExchange.getRequestURI()).run();
-            if (response == null) {
-                response = "BAD";
-                httpExchange.sendResponseHeaders(502, response.length());
-            } else {
-                httpExchange.sendResponseHeaders(200, response.length());
-            }
+            var response = VcCommand.fromRequestUri(httpExchange.getRequestURI())
+                    .map(VcCommand::run)
+                    .map(resp -> new VoicePluginResponse(200, resp))
+                    .orElse(new VoicePluginResponse(502, "BAD"));
+            httpExchange.sendResponseHeaders(response.responseCode(), response.response().length());
             OutputStream os = httpExchange.getResponseBody();
-            os.write(response.getBytes());
+            os.write(response.response().getBytes());
             os.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Failed to process command... ", e);
             final String response = e.toString();
             httpExchange.sendResponseHeaders(500, response.length());
             OutputStream os = httpExchange.getResponseBody();
             os.write(response.getBytes());
             os.close();
         }
+    }
+
+    record VoicePluginResponse(int responseCode, String response) {
     }
 }

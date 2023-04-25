@@ -4,7 +4,7 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.LogicalPosition;
 
-public class LocationCommand implements VcCommand {
+public class LocationCommand extends VcCommand {
 
     public LocationCommand() {
     }

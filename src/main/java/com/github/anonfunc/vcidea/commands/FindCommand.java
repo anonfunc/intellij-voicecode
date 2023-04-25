@@ -12,7 +12,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.wm.IdeFocusManager;
 
-public class FindCommand implements VcCommand {
+public class FindCommand extends VcCommand {
     private String direction;
     private String searchTerm;
 

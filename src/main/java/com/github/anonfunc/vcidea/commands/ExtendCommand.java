@@ -7,7 +7,7 @@ import com.intellij.openapi.editor.ScrollType;
 import com.intellij.openapi.editor.SelectionModel;
 import com.intellij.openapi.wm.IdeFocusManager;
 
-public class ExtendCommand implements VcCommand {
+public class ExtendCommand extends VcCommand {
     private int targetLine;
 
     public ExtendCommand(int line) {

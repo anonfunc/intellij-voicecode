@@ -1,6 +1,7 @@
 package com.github.anonfunc.vcidea.commands;
 
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.ScrollType;
 import com.intellij.openapi.util.TextRange;
@@ -17,7 +18,9 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Set;
 
-public class StructureCommand implements VcCommand {
+public class StructureCommand extends VcCommand {
+
+  private static final Logger LOG = Logger.getInstance(StructureCommand.class);
 
   private final String cursorMovement;
   private final String startNavType;
@@ -32,9 +35,8 @@ public class StructureCommand implements VcCommand {
 
   @Override
   public String run() {
-    System.out.println(
-        "psi " + this.cursorMovement + " " + this.startNavType + " " + String
-            .join(" ", this.classes));
+    LOG.debug("psi " + this.cursorMovement + " " + this.startNavType + " " + String
+                    .join(" ", this.classes));
     try {
       ApplicationManager.getApplication().invokeAndWait(() -> {
         final Editor e = VcCommand.getEditor();
@@ -44,7 +46,7 @@ public class StructureCommand implements VcCommand {
             .getElementAtOffset(psiFile, startingOffset);
         printHierarchy(currentElement);
         currentElement = parentElementOfNavType(currentElement, startNavType);
-        System.out.println("Containing element? " + (currentElement != null));
+        LOG.debug("Containing element? " + (currentElement != null));
 
         if (currentElement == null) {
           return;
@@ -52,7 +54,7 @@ public class StructureCommand implements VcCommand {
 
         for (String clazz : this.classes) {
           currentElement = childElementOfNavType(currentElement, clazz, startingOffset);
-          System.out.println("Next element(" + clazz + ") found? " + (currentElement != null));
+          LOG.debug("Next element(" + clazz + ") found? " + (currentElement != null));
           if (currentElement == null) {
             return;
           }
@@ -73,7 +75,7 @@ public class StructureCommand implements VcCommand {
 
       });
     } catch (Exception e) {
-      e.printStackTrace();
+      LOG.error("Structure command failed", e);
       return null;
     }
 
@@ -82,7 +84,7 @@ public class StructureCommand implements VcCommand {
 
   private void printHierarchy(PsiElement element) {
     while (element != null && element.getNode() != null) {
-      System.out.println(element.toString() + " " + element.getClass().getName() + " " + element
+      LOG.debug(element.toString() + " " + element.getClass().getName() + " " + element
           .getNavigationElement().toString() + " " + element.getNode().getElementType().toString());
 
       element = element.getParent();
@@ -92,7 +94,7 @@ public class StructureCommand implements VcCommand {
   private PsiElement parentElementOfNavType(PsiElement element, String specifier) {
     final String navType = specifier.split("#")[0];
     while (element != null && element.getNode() != null) {
-//      System.out.println(element.toString() + " " + element.getClass().getName() + " " + element
+//      LOG.debug(element.toString() + " " + element.getClass().getName() + " " + element
 //          .getNavigationElement().toString() + " " + element.getNode().getElementType().toString());
       if (matches(navType, element.getNode().getElementType().toString())) {
         return element;
@@ -142,12 +144,12 @@ public class StructureCommand implements VcCommand {
     if (results.size() == 0) {
       return null;
     }
-    System.out.println("Results " + results.toString());
+    LOG.debug("Results " + results.toString());
     if (direction == null) {
       if (index < 0) {
-//      System.out.println("Negative index bump " + index);
+//      LOG.debug("Negative index bump " + index);
         index += results.size();
-//      System.out.println("Negative index bump " + index);
+//      LOG.debug("Negative index bump " + index);
       }
       return results.get(index);
     } else if (direction.equals("next")) {
@@ -155,8 +157,7 @@ public class StructureCommand implements VcCommand {
       PsiElement best = null;
       int distance = 9999;
       for (PsiElement result : results) {
-        System.out
-            .println("Result " + result + " offset: " + result.getTextRange().getStartOffset() + " > " + offset);
+        LOG.debug("Result " + result + " offset: " + result.getTextRange().getStartOffset() + " > " + offset);
         final int dist = result.getTextRange().getStartOffset() - offset;
         if (dist > 0 && dist <= distance) {
           best = result;
@@ -169,7 +170,7 @@ public class StructureCommand implements VcCommand {
       PsiElement best = null;
       int distance = 9999;
       for (PsiElement result : results) {
-        System.out.println(
+        LOG.debug(
             "Result " + result + " offset: " + result.getTextRange().getEndOffset() + " < "
                 + offset);
         final int dist = offset - result.getTextRange().getEndOffset();
@@ -197,7 +198,7 @@ public class StructureCommand implements VcCommand {
   private boolean matches(String navType, String type) {
     final String[] matchingTypes = navType.split("\\|");
     for (String matchingType : matchingTypes) {
-//    System.out.println("type "+ type +" matches " + matchingType + "? " + type.matches(matchingType));
+//    LOG.debug("type "+ type +" matches " + matchingType + "? " + type.matches(matchingType));
       if (!matchingType.startsWith("^")) {
         matchingType = ".*"+ matchingType;
       }

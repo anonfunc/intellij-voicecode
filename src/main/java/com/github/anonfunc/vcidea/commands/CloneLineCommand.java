@@ -3,6 +3,7 @@ package com.github.anonfunc.vcidea.commands;
 import com.intellij.openapi.application.Application;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.CommandProcessor;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -10,7 +11,9 @@ import com.intellij.openapi.util.TextRange;
 
 
 
-public class CloneLineCommand implements VcCommand {
+public class CloneLineCommand extends VcCommand {
+
+    private static final Logger LOG = Logger.getInstance(StructureCommand.class);
     private int sourceLine;
 
     public CloneLineCommand(final int sourceLine) {
@@ -37,7 +40,7 @@ public class CloneLineCommand implements VcCommand {
                 });
             });
         } catch (Exception ex) {
-            ex.printStackTrace();
+            LOG.error("Failed to run clone line command", ex);
             return null;
         }
         return "OK";
