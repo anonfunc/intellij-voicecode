@@ -6,7 +6,7 @@ import com.intellij.openapi.editor.LogicalPosition;
 import com.intellij.openapi.editor.ScrollType;
 import com.intellij.openapi.wm.IdeFocusManager;
 
-public class GotoCommand implements VcCommand {
+public class GotoCommand extends VcCommand {
     private int line;
     private int column;
 

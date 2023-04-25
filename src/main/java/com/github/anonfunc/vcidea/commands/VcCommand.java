@@ -1,5 +1,6 @@
 package com.github.anonfunc.vcidea.commands;
 
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
@@ -12,9 +13,13 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLDecoder;
 import java.util.Arrays;
+import java.util.Optional;
 
-public interface VcCommand {
-    static VcCommand fromRequestUri(URI requestURI) {
+public abstract class VcCommand {
+
+    private static final Logger LOG = Logger.getInstance(VcCommand.class);
+
+    public static Optional<VcCommand> fromRequestUri(URI requestURI) {
 
         String[] split;
         try {
@@ -26,44 +31,44 @@ public interface VcCommand {
 //            Notifications.Bus.notify(notification);
             split = split[1].split(" ");
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-            return null;
+            LOG.error("Failed to parse request URI", e);
+            return Optional.empty();
 
         }
 
         String command = split[0];
         if (command.equals("goto")) {
-            return new GotoCommand(Integer.parseInt(split[1]), Integer.parseInt(split[2]));
+            return Optional.of(new GotoCommand(Integer.parseInt(split[1]), Integer.parseInt(split[2])));
         }
         if (command.equals("range")) {
-            return new RangeCommand(Integer.parseInt(split[1]), Integer.parseInt(split[2]));
+            return Optional.of(new RangeCommand(Integer.parseInt(split[1]), Integer.parseInt(split[2])));
         }
         if (command.equals("extend")) {
-            return new ExtendCommand(Integer.parseInt(split[1]));
+            return Optional.of(new ExtendCommand(Integer.parseInt(split[1])));
         }
         if (command.equals("clone")) {
-            return new CloneLineCommand(Integer.parseInt(split[1]));
+            return Optional.of(new CloneLineCommand(Integer.parseInt(split[1])));
         }
         if (command.equals("action")) {
-            return new GivenActionCommand(split[1]);
+            return Optional.of(new GivenActionCommand(split[1]));
         }
         if (command.equals("location")) {
-            return new LocationCommand();
+            return Optional.of(new LocationCommand());
         }
         if (command.equals("find")) {
-            return new FindCommand(split[1], String.join(" ", Arrays.copyOfRange(split, 2, split.length)));
+            return Optional.of(new FindCommand(split[1], String.join(" ", Arrays.copyOfRange(split, 2, split.length))));
         }
         if (command.equals("psi")) {
-            return new StructureCommand(split[1], String.join(" ", Arrays.copyOfRange(split, 2, split.length)).split(","));
+            return Optional.of(new StructureCommand(split[1], String.join(" ", Arrays.copyOfRange(split, 2, split.length)).split(",")));
         }
-        return null;
+        return Optional.empty();
     }
 
     static Editor getEditor() {
         Project currentProject = getProject();
         Editor e = FileEditorManager.getInstance(currentProject).getSelectedTextEditor();
         if (e == null) {
-            System.out.println("No selected editor?");
+            LOG.debug("No selected editor?");
         }
         return e;
     }
@@ -73,7 +78,7 @@ public interface VcCommand {
         ToolWindowManager twm = ToolWindowManager.getInstance(currentProject);
         ToolWindow tw = twm.getToolWindow(twm.getActiveToolWindowId());
         if (tw == null) {
-            System.out.println("No selected tool window?");
+            LOG.debug("No selected tool window?");
         }
         return tw;
     }
@@ -90,5 +95,5 @@ public interface VcCommand {
         return IdeFocusManager.findInstance().getLastFocusedFrame().getProject();
     }
 
-    String run();
+    public abstract String run();
 }

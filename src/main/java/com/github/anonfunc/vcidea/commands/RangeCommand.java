@@ -7,7 +7,7 @@ import com.intellij.openapi.editor.ScrollType;
 import com.intellij.openapi.editor.SelectionModel;
 import com.intellij.openapi.wm.IdeFocusManager;
 
-public class RangeCommand implements VcCommand {
+public class RangeCommand extends VcCommand {
 
     private int startLine;
     private int endLine;

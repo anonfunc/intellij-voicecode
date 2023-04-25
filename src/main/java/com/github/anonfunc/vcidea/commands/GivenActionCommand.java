@@ -10,7 +10,7 @@ import java.awt.Component;
 import java.awt.event.InputEvent;
 
 // Not sure if this works.  XXX
-public class GivenActionCommand implements VcCommand {
+public class GivenActionCommand extends VcCommand {
     private String actionId;
 
     public GivenActionCommand(final String actionId) {
